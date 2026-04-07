@@ -14,6 +14,27 @@ network:
   allowed:
     - defaults
     - python
+    - "openai.com"
+    - "github.blog"
+    - "devblogs.microsoft.com"
+    - "blog.google"
+    - "aws.amazon.com"
+    - "blogs.nvidia.com"
+    - "developer.apple.com"
+    - "blog.cloudflare.com"
+    - "deepmind.google"
+    - "huggingface.co"
+    - "news.ycombinator.com"
+    - "www.producthunt.com"
+    - "techcrunch.com"
+    - "www.theverge.com"
+    - "feeds.arstechnica.com"
+    - "www.wired.com"
+    - "www.technologyreview.com"
+    - "feed.infoq.com"
+    - "www.infoq.com"
+    - "lobste.rs"
+    - "dev.to"
 safe-outputs:
   create-pull-request:
     title-prefix: "[tech-insight] "
