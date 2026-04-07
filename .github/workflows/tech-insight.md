@@ -13,6 +13,10 @@ network:
   allowed:
     - defaults
     - python
+safe-outputs:
+  create-pull-request:
+    title-prefix: "[tech-insight] "
+    labels: [automation, tech-insight]
 mcp-scripts:
   tech-read-source-list:
     description: "Read RSS source list configuration"
@@ -173,7 +177,7 @@ mcp-scripts:
 1. 先调用 `tech.read_source_list(source_list_path)` 读取并确认源列表可用。
 2. 调用 `tech.fetch_all_to_disk(source_list_path, signals_dir, timeout_seconds=15, max_chars=200000, max_items_per_source=25)` 抓取所有信号并落盘到 `signals_dir`。
 3. 调用 `tech.load_articles_from_disk(signals_dir, source_list_path, max_items_per_source=25, time_window_hours=24)` 生成原始信号 JSON。
-4. 用 `write_text_file(path="Lab-01-Tech-Insights/output/raw_signals.json", text=<raw_signals_json>, overwrite=True)` 保存原始信号。
+4. 用 `edit` 工具将原始信号 JSON 写入 `Lab-01-Tech-Insights/output/raw_signals.json`。
 5. 简要汇报源列表路径、抓取目录、纳入时间窗与原始信号保存位置。
 6. 如果工具提示使用了兜底逻辑，在输出中注明。
 
@@ -205,7 +209,7 @@ mcp-scripts:
 ```
 
 2. 将模型生成的聚类候选结果交给 `tech.cluster_or_fallback(raw_signals_json, clusters_json, top_k=12)` 做校验与兜底，得到最终热点聚类 JSON。
-3. 用 `write_text_file(path="Lab-01-Tech-Insights/output/clusters/hotspots.json", text=<hotspot_clusters_json>, overwrite=True)` 保存结果。
+3. 用 `edit` 工具将最终热点聚类 JSON 写入 `Lab-01-Tech-Insights/output/clusters/hotspots.json`。
 4. 在输出中区分 `cross_source_trends` 与 `high_signal_singles` 的主要发现。
 5. 如果工具提示使用了兜底逻辑，在输出中注明。
 
@@ -224,7 +228,7 @@ mcp-scripts:
 ```
 
 2. 将模型生成的洞察候选结果交给 `tech.insight_or_fallback(clusters_json, insights_json)` 做校验与兜底，得到最终洞察 JSON。
-3. 用 `write_text_file(path="Lab-01-Tech-Insights/output/insights/insights.json", text=<hotspot_insights_json>, overwrite=True)` 保存结果。
+3. 用 `edit` 工具将最终洞察 JSON 写入 `Lab-01-Tech-Insights/output/insights/insights.json`。
 4. 输出时覆盖“发生了什么 / 为什么重要 / 影响谁 / 接下来怎么做”四个维度。
 5. 如果工具提示使用了兜底逻辑，在输出中注明。
 
@@ -252,8 +256,8 @@ mcp-scripts:
 ```
 
 2. 将模型生成的 Markdown 草稿交给 `tech.render_report_or_fallback(clusters_json, insights_json, draft_markdown)` 做校验与兜底，得到最终 Markdown。
-3. 用 `write_text_file(path="Lab-01-Tech-Insights/output/report.md", text=<final_markdown>, overwrite=True)` 保存报告。
-4. 再用 `write_text_file(path="Lab-01-Tech-Insights/frontend/report.md", text=<final_markdown>, overwrite=True)` 同步前端展示文件。
-5. 通过 safe-outputs 的提交机制提交 `Lab-01-Tech-Insights/frontend/report.md`，不要引入额外的手工 git 流程。
-6. 最终总结需说明报告输出路径与前端同步路径。
+3. 用 `edit` 工具将最终 Markdown 写入 `Lab-01-Tech-Insights/output/report.md`。
+4. 再用 `edit` 工具将同一份 Markdown 写入 `Lab-01-Tech-Insights/frontend/report.md`，作为前端展示文件。
+5. 通过 safe-outputs 的 `create-pull-request` 机制提交包含 `Lab-01-Tech-Insights/output/report.md` 和 `Lab-01-Tech-Insights/frontend/report.md` 的 PR。PR 标题应包含日期和报告摘要。不要引入额外的手工 git 流程。
+6. 最终总结需说明报告输出路径、前端同步路径和 PR 编号。
 7. 如果工具提示使用了兜底逻辑，在输出中注明。
